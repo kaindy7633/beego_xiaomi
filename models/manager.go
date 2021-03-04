@@ -2,15 +2,16 @@ package models
 
 // Manager ...
 type Manager struct {
-	ID       int
+	Id       int
 	Username string
 	Password string
 	Mobile   string
 	Email    string
 	Status   int
-	RoleID   int
+	RoleId   int
 	AddTime  int
-	isSuper  int
+	IsSuper  int
+	Role     Role `gorm:"foreignkey:RoleId;association_foreignkey:Id"`
 }
 
 // TableName ...

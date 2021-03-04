@@ -102,3 +102,48 @@ func (c *RoleController) Delete() {
 		c.Success("删除角色成功", "/role")
 	}
 }
+
+// 授权
+func (c *RoleController) Auth() {
+	// 获取角色id
+	roleId, err := c.GetInt("id")
+	if err != nil {
+		c.Error("传入参数错误", "/role/auth")
+		return
+	}
+
+	// 获取权限
+	access := []models.Access{}
+	models.DB.Preload("AccessItem").Where("module_id=0").Find(&access)
+
+	c.Data["accessList"] = access
+	c.Data["roleId"] = roleId
+	c.TplName = "admin/role/auth.html"
+}
+
+// 执行授权
+func (c *RoleController) DoAuth() {
+	// 获取参数post传过来的角色id 和 权限切片
+	roleId, err := c.GetInt("role_id")
+	if err != nil {
+		c.Error("传入参数错误", "/role")
+		return
+	}
+
+	accessNode := c.GetStrings("access_node")
+
+	// 先删除掉原有的数据
+	roleAccess := models.RoleAccess{}
+	models.DB.Where("role_id=?", roleId).Delete(&roleAccess)
+
+	// 新增数据
+	for _, v := range accessNode {
+		accessId, _ := strconv.Atoi(v)
+		roleAccess.AccessId = accessId
+		roleAccess.RoleId = roleId
+		models.DB.Create(&roleAccess)
+	}
+
+	// c.Success("授权成功", "/role/auth?id="+strconv.Itoa(roleId))
+	c.Success("授权成功", "/role")
+}

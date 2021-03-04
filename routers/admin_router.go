@@ -32,7 +32,7 @@ func init() {
 		beego.NSRouter("/manager/edit", &admin.ManagerController{}, "get:Edit"),
 		beego.NSRouter("/manager/doAdd", &admin.ManagerController{}, "post:DoAdd"),
 		beego.NSRouter("/manager/doEdit", &admin.ManagerController{}, "post:DoEdit"),
-		beego.NSRouter("/manager/delete", &admin.ManagerController{}, "post:Delete"),
+		beego.NSRouter("/manager/delete", &admin.ManagerController{}, "get:Delete"),
 
 		beego.NSRouter("/login", &admin.LoginController{}),
 		beego.NSRouter("/login/doLogin", &admin.LoginController{}, "post:DoLogin"),
@@ -46,6 +46,16 @@ func init() {
 		beego.NSRouter("/role/doAdd", &admin.RoleController{}, "post:DoAdd"),
 		beego.NSRouter("/role/doEdit", &admin.RoleController{}, "post:DoEdit"),
 		beego.NSRouter("/role/delete", &admin.RoleController{}, "get:Delete"),
+		beego.NSRouter("/role/auth", &admin.RoleController{}, "get:Auth"),
+		beego.NSRouter("/role/doAuth", &admin.RoleController{}, "post:DoAuth"),
+
+		// 权限管理
+		beego.NSRouter("/access", &admin.AccessController{}),
+		beego.NSRouter("/access/add", &admin.AccessController{}, "get:Add"),
+		beego.NSRouter("/access/edit", &admin.AccessController{}, "get:Edit"),
+		beego.NSRouter("/access/doAdd", &admin.AccessController{}, "post:DoAdd"),
+		beego.NSRouter("/access/doEdit", &admin.AccessController{}, "post:DoEdit"),
+		beego.NSRouter("/access/delete", &admin.AccessController{}, "get:Delete"),
 	)
 	beego.AddNamespace(ns)
 }

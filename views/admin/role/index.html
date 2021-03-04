@@ -24,6 +24,7 @@
                     <td>{{$value.AddTime | unixToDate}}</td>
                     <td class="text-center">
 
+                      <a href="/{{config "String" "admin_path" ""}}/role/auth?id={{$value.Id}}">授权</a>
                       <a href="/{{config "String" "admin_path" ""}}/role/edit?id={{$value.Id}}">编辑</a>
                       <a class="delete" href="/{{config "String" "admin_path" ""}}/role/delete?id={{$value.Id}}">删除</a>
 
