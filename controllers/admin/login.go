@@ -67,3 +67,11 @@ func (c *LoginController) DoLogin() {
 		c.Error("验证码错误", "/login")
 	}
 }
+
+// 退出登录
+func (c *LoginController) LoginOut() {
+	if err := c.DelSession("userinfo"); err != nil {
+		c.Error("退出登录失败", "/login")
+	}
+	c.Success("退出登录成功", "/login")
+}

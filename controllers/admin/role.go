@@ -116,6 +116,27 @@ func (c *RoleController) Auth() {
 	access := []models.Access{}
 	models.DB.Preload("AccessItem").Where("module_id=0").Find(&access)
 
+	// 获取当前角色拥有的权限
+	roleAccess := []models.RoleAccess{}
+	models.DB.Where("role_id=?", roleId).Find(&roleAccess)
+	// 循环结果把键值放在新建的Map里
+	roleAccessMap := make(map[int]int)
+	for _, v := range roleAccess {
+		roleAccessMap[v.AccessId] = v.AccessId
+	}
+
+	for i := 0; i < len(access); i++ {
+		if _, ok := roleAccessMap[access[i].Id]; ok {
+			access[i].Checked = true
+		}
+
+		for j := 0; j < len(access[i].AccessItem); j++ {
+			if _, ok := roleAccessMap[access[i].AccessItem[j].Id]; ok {
+				access[i].AccessItem[j].Checked = true
+			}
+		}
+	}
+
 	c.Data["accessList"] = access
 	c.Data["roleId"] = roleId
 	c.TplName = "admin/role/auth.html"
@@ -144,6 +165,6 @@ func (c *RoleController) DoAuth() {
 		models.DB.Create(&roleAccess)
 	}
 
-	// c.Success("授权成功", "/role/auth?id="+strconv.Itoa(roleId))
-	c.Success("授权成功", "/role")
+	c.Success("授权成功", "/role?id="+strconv.Itoa(roleId))
+	// c.Success("授权成功", "/role")
 }

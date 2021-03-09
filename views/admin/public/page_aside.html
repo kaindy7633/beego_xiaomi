@@ -1,34 +1,42 @@
 <ul class="aside">
 
-    <li>
-        <h4>增加管理员</h4>
+    {{$isSuper := .isSuper}}
 
-        <ul>
-            <li  class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/manager"> 管理员列表</a></li>
+    {{range $key, $value := .accessList}}  
+    {{if eq $isSuper 1}}
+        <li>
+            <h4>{{$value.ModuleName}}</h4>
 
-            <li class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/manager/add">增加管理员</a></li>
-        </ul>
-    </li>
+            <ul>
 
-    <li>
-        <h4>角色管理</h4>
+              {{range $k, $v := $value.AccessItem}}
+                {{if eq $v.Type 2}}
+                  <li class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/{{$v.Url}}">{{$v.ActionName}}</a></li>
+                {{end}}
+              {{end}}
+              </ul>
+        </li>
+    {{else}}
+        {{if eq $value.Checked true}}
+          <li>
+              <h4>{{$value.ModuleName}}</h4>
 
-        <ul>
-            <li  class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/role"> 角色列表</a></li>
+              <ul>
 
-            <li class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/role/add">增加角色</a></li>
-        </ul>
-    </li>
+                {{range $k, $v := $value.AccessItem}}
+                  {{if eq $v.Checked true}}
+                    {{if eq $v.Type 2}}
+                      <li class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/{{$v.Url}}">{{$v.ActionName}}</a></li>
+                    {{end}}
+                  {{end}}
+                {{end}}
+              </ul>
+          </li>
+        {{end}}
 
-    <li>
-      <h4>权限管理</h4>
+    {{end}}
 
-      <ul>
-          <li  class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/access"> 权限列表</a></li>
-
-          <li class="list-group-item"> <a target="rightMain" href="/{{config "String" "admin_path" ""}}/access/add">增加权限</a></li>
-      </ul>
-  </li>
+    {{end}}
 
 
 </ul>
